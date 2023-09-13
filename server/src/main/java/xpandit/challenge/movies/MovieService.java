@@ -17,6 +17,11 @@ public class MovieService {
         return movieRepository.findAll(pageable);
     }
 
+    public Page<MovieProjection> getAllMoviesByFields(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findAllProjectedBy(pageable);
+    }
+
     public Movie getMovieById(String movieId) {
         return movieRepository.findById(movieId).orElse(null);
     }

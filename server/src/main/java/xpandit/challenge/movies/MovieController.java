@@ -1,7 +1,10 @@
 package xpandit.challenge.movies;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +21,20 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping
-    public ResponseEntity<Page<Movie>> getMovies(
+    public ResponseEntity<?> getMovies(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<Movie> moviePage = movieService.getAllMovies(page, size);
-        return new ResponseEntity<>(moviePage, HttpStatus.OK);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) List<String> fields) {
+
+        if (fields != null && !fields.isEmpty()) {
+            // Apply projection using the specified fields
+            Page<MovieProjection> moviePage = movieService.getAllMoviesByFields(page, size);
+            return new ResponseEntity<>(moviePage, HttpStatus.OK);
+        } else {
+            // No projection, return all fields
+            Page<Movie> moviePage = movieService.getAllMovies(page, size);
+            return new ResponseEntity<>(moviePage, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/{movieId}")
