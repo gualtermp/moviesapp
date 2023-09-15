@@ -9,10 +9,15 @@ import {
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { MoviesListProps } from "../../types/MoviesListProps";
-import { useDispatch } from "react-redux";
-import { setSelectedMovieID } from "../../store/moviesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectPage,
+  setPage,
+  setSelectedMovieID,
+} from "../../store/moviesSlice";
 import CustomMovieTableCell from "./CustomCells/CustomMovieTableCell";
 import CustomMovieTableBodyCell from "./CustomCells/CustomMovieTableBodyCell";
+import { useEffect, useRef, useState } from "react";
 
 const columns = [
   {
@@ -37,64 +42,103 @@ const columns = [
   },
 ];
 
-export function MoviesList({ data }: MoviesListProps) {
+export function MoviesList({ data, isFetching, loadMoreData }: MoviesListProps) {
   const dispatch = useDispatch();
+  const tableRef = useRef<HTMLDivElement | null>(null);
 
-  const handleVisualizeMovieDetails = (id: number) => {
+  const handleVisualizeMovieDetails = (id: string) => {
     dispatch(setSelectedMovieID(id));
   };
-  
+
+  const handleScroll = () => {
+    // Reached the bottom of the table
+    if(tableRef.current) {
+      const first = tableRef.current.scrollTop + tableRef.current.clientHeight
+      const second = tableRef.current.scrollHeight
+      console.log('first', first)
+      console.log('second', second)
+      if (
+        tableRef.current &&
+        !isFetching &&
+        tableRef.current.scrollTop + tableRef.current.clientHeight >=
+          tableRef.current.scrollHeight
+      ) {
+        loadMoreData()
+      }
+    }
+
+  };
+
+  useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (tableRef.current) {
+        tableRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   return (
-    <TableContainer sx={{ maxHeight: "70vh" }}>
-      <Table stickyHeader>
-        <TableHead>
-          <TableRow>
-            {columns.map((c, i) => (
-              <CustomMovieTableCell
-                width={c.width}
-                key={`column-${c.label}`}
-                sx={{
-                  textAlign: i === 0 ? "center" : "left",
-                }}
-              >
-                {c.label.toUpperCase()}
-              </CustomMovieTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((row, i) => (
-            <TableRow
-              key={`movie-${i}`}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <CustomMovieTableBodyCell
-                sx={{
-                  textAlign: "center",
-                }}
-              >
-                {i + 1}
-              </CustomMovieTableBodyCell>
-              <CustomMovieTableBodyCell>{row.title}</CustomMovieTableBodyCell>
-              <CustomMovieTableBodyCell>
-                {new Date(row.release_date).getFullYear()}
-              </CustomMovieTableBodyCell>
-              <CustomMovieTableBodyCell>
-                ${row.revenue?.toLocaleString("en-US")}
-              </CustomMovieTableBodyCell>
-              <CustomMovieTableBodyCell>
-                <IconButton onClick={() => handleVisualizeMovieDetails(row.id)}>
-                  <VisibilityIcon
-                    sx={{
-                      color: "#9aaebb",
-                    }}
-                  />
-                </IconButton>
-              </CustomMovieTableBodyCell>
+    <div style={{maxHeight: '80vh'}}>
+      <TableContainer
+        ref={tableRef}
+        sx={{ height: "50vh", overflowY: "auto" }}
+      >
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {columns.map((c, i) => (
+                <CustomMovieTableCell
+                  width={c.width}
+                  key={`column-${c.label}`}
+                  sx={{
+                    textAlign: i === 0 ? "center" : "left",
+                  }}
+                >
+                  {c.label.toUpperCase()}
+                </CustomMovieTableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data?.map((row, i) => (
+              <TableRow
+                key={`movie-${i}`}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <CustomMovieTableBodyCell
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {i + 1}
+                </CustomMovieTableBodyCell>
+                <CustomMovieTableBodyCell>{row.title}</CustomMovieTableBodyCell>
+                <CustomMovieTableBodyCell>
+                  {new Date(row.release_date).getFullYear()}
+                </CustomMovieTableBodyCell>
+                <CustomMovieTableBodyCell>
+                  ${row.revenue?.toLocaleString("en-US")}
+                </CustomMovieTableBodyCell>
+                <CustomMovieTableBodyCell>
+                  <IconButton
+                    onClick={() => handleVisualizeMovieDetails(row.id)}
+                  >
+                    <VisibilityIcon
+                      sx={{
+                        color: "#9aaebb",
+                      }}
+                    />
+                  </IconButton>
+                </CustomMovieTableBodyCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }

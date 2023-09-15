@@ -20,7 +20,7 @@ export const moviesApi = createApi({
       query: ({ page }) =>
         `movies?page=${
           page ?? 0
-        }&size=10&fields=id&fields=title&fields=release_date&fields=revenue`,
+        }&size=10&fields=id&fields=title&fields=releaseDate&fields=revenue`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
@@ -32,7 +32,7 @@ export const moviesApi = createApi({
         return currentArg !== previousArg;
       },
     }),
-    getMovieById: builder.query<Movie, number>({
+    getMovieById: builder.query<Movie, string>({
       query: (id) => `movies/${id}`,
     }),
   }),

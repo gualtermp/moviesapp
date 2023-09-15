@@ -1,10 +1,10 @@
 package xpandit.challenge.movies;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public interface MovieProjection {
     String getId();
     String getTitle();
-    LocalDate getReleaseDate();
+    Date getReleaseDate();
     Long getRevenue();
 }

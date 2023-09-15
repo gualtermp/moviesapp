@@ -15,7 +15,7 @@ const moviesSlice = createSlice({
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
-    setSelectedMovieID(state, action: PayloadAction<number | undefined>) {
+    setSelectedMovieID(state, action: PayloadAction<string | undefined>) {
       state.selectedMovieID = action.payload;
     },
   },

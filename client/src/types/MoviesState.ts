@@ -1,4 +1,4 @@
 export interface MoviesState {
   page: number;
-  selectedMovieID?: number;
+  selectedMovieID?: string;
 }

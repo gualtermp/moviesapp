@@ -1,0 +1,25 @@
+.container_movies_list {
+    padding: 0 214px;
+}
+
+.movie_info_container {
+    position: "absolute";
+    top: "50%";
+    left: "50%";
+    transform: "translate(-50%, -50%)";
+    width: "50%";
+    background-color: white;
+    box-shadow: 24;
+    max-height: "90vh";
+    overflow: "auto";
+    padding: 0 58px;
+  }
+
+.title {
+    font-family: Roboto;
+    font-size: 24px;
+    color: #386071;
+    padding: 24px 0;
+
+}
+
