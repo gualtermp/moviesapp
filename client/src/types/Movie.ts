@@ -2,14 +2,14 @@ export interface Movie {
   id: string;
   title: string;
   revenue: number;
-  release_date: string;
+  releaseDate: string;
   rating: number;
   genres: string[];
   overview: string;
   director: string;
   actors: string[];
   runtime: number;
-  vote_average: number;
-  vote_count: number;
+  voteAverage: number;
+  voteCount: number;
   metascore: number;
 }

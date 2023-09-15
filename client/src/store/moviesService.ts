@@ -14,7 +14,7 @@ export const moviesApi = createApi({
   endpoints: (builder) => ({
     // Pick lets us select what we want to get
     listMovies: builder.query<
-      ListResponse<Pick<Movie, "id" | "title" | "release_date" | "revenue">>,
+      ListResponse<Pick<Movie, "id" | "title" | "releaseDate" | "revenue">>,
       { page: number; }
     >({
       query: ({ page }) =>

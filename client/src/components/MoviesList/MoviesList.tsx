@@ -68,6 +68,8 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
     };
   }, []);
 
+  console.log(data[0].releaseDate)
+
   return (
     <div style={{ maxHeight: "80vh" }}>
       <TableContainer ref={tableRef} sx={{ height: "50vh", overflowY: "auto" }}>
@@ -102,7 +104,7 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
                 </CustomMovieTableBodyCell>
                 <CustomMovieTableBodyCell>{row.title}</CustomMovieTableBodyCell>
                 <CustomMovieTableBodyCell>
-                  {new Date(row.release_date).getFullYear()}
+                  {new Date(row.releaseDate).getFullYear()}
                 </CustomMovieTableBodyCell>
                 <CustomMovieTableBodyCell>
                   ${row.revenue?.toLocaleString("en-US")}

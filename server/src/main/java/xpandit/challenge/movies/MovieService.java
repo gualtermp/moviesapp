@@ -1,6 +1,7 @@
 package xpandit.challenge.movies;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.OrderUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,10 @@ public class MovieService {
     }
 
     public Page<MovieProjection> getAllMoviesByFields(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "voteAverage"));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+                Sort.Order.desc("voteCount"),
+                Sort.Order.desc("voteAverage")));
         return movieRepository.findAllProjectedBy(pageable);
     }
 

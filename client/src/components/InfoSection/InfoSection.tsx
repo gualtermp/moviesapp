@@ -2,11 +2,11 @@ import { InfoSectionProps } from "../../types/InfoSectionProps";
 
 import './InfoSection.scss'
 
-export function InfoSection({ title, value }: InfoSectionProps) {
+export function InfoSection({ title, value, specialClass='' }: InfoSectionProps) {
   return (
-    <div className='info_section'>
+    <div className={"info_section"}>
       <span className="field_title">{title}</span>
-      <span className="field_value">{value}</span>
+      <span className={`field_value ${specialClass}`}>{value}</span>
     </div>
   );
 }

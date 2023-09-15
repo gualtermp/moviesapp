@@ -16,7 +16,7 @@ const divider: SxProps<Theme> = {
 export const MovieInfo = ({ movieId, onClose }: MovieInfoProps) => {
   const { data: movie } = useGetMovieByIdQuery(movieId);
 
-  return (
+  return movie ? (
     <div className="movie_info_container">
       <div className="movie_info_header">
         <span className="title">{movie?.title}</span>
@@ -28,28 +28,29 @@ export const MovieInfo = ({ movieId, onClose }: MovieInfoProps) => {
         </div>
       </div>
       <Divider sx={divider}/>
-      <InfoSection title="Year" value={movie?.release_date} />
-      <InfoSection title="Genre" value={movie?.genres.join(", ") || "---"} />
-      <InfoSection title="Description" value={movie?.overview} />
+      <InfoSection title="Year" value={new Date(movie.releaseDate).getFullYear().toString()} />
+      <InfoSection title="Genre" value={movie.genres.join(", ") || "---"} />
+      <InfoSection title="Description" value={movie.overview} specialClass="description" />
       <Grid container columnSpacing={5}>
         <Grid item xs={12} lg={2}>
-          <InfoSection title="Director" value={movie?.director} />
+          <InfoSection title="Director" value={movie.director} specialClass="makers" />
         </Grid>
         <Grid item xs={12} lg={10}>
           <InfoSection
             title="Actors"
-            value={movie?.actors?.slice(0, 4).join("     ") || "-"}
+            value={movie.actors.slice(0, 4).join("  ") || "No actors"}
+            specialClass="makers" 
           />
         </Grid>
       </Grid>
-      <InfoSection title="Runtime" value={`${movie?.runtime} mins`} />
-      <InfoSection title="Rating" value={movie?.vote_average?.toString()} />
-      <InfoSection title="Votes" value={movie?.vote_count?.toString()} />
+      <InfoSection title="Runtime" value={`${movie.runtime} mins`} />
+      <InfoSection title="Rating" value={movie.voteAverage.toString()} />
+      <InfoSection title="Votes" value={movie.voteCount.toString()} />
       <InfoSection
         title="Revenue"
-        value={`$${movie?.revenue.toLocaleString("en-US")}`}
+        value={`$${movie.revenue.toLocaleString("en-US")}`}
       />
-      <InfoSection title="Metascore" value={movie?.metascore?.toString()} />
+      <InfoSection title="Metascore" value={movie.metascore.toString()} />
     </div>
-  );
+  ): null;
 };
