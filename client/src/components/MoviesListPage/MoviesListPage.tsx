@@ -21,7 +21,6 @@ export function MoviesListPage() {
   const selectedMovieID = useSelector(selectSelectedMovieID) ?? "";
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
   const { data: allMovies, isLoading, isFetching } = useListMoviesQuery({
     page,
   });
@@ -31,13 +30,6 @@ export function MoviesListPage() {
       setIsModalOpen(true);
     }
   }, [selectedMovieID]);
-
-  // Callback to load more data when scrolled to the bottom
-  const loadMoreData = () => {
-    if (!isFetching) {
-      dispatch(setPage(page + 1));
-    }
-  };
 
   const handleOnClose = () => {
     dispatch(setSelectedMovieID(undefined));
@@ -52,7 +44,12 @@ export function MoviesListPage() {
             Movie Ranking
             {isFetching && <CircularProgress size={20} />}
           </div>
-          <MoviesList data={allMovies?.content} isFetching={isFetching} loadMoreData={loadMoreData}/>
+          {allMovies?.content ? (
+            <MoviesList
+              data={allMovies?.content}
+              fetches={isFetching || isLoading}
+            />
+          ) : null}
         </div>
       </div>
       <Modal open={isModalOpen}>

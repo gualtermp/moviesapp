@@ -12,8 +12,8 @@ const moviesSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {
-    setPage(state, action: PayloadAction<number>) {
-      state.page = action.payload;
+    setPage(state) {
+      state.page = state.page + 1;
     },
     setSelectedMovieID(state, action: PayloadAction<string | undefined>) {
       state.selectedMovieID = action.payload;

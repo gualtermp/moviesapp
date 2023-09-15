@@ -6,18 +6,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { MoviesListProps } from "../../types/MoviesListProps";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectPage,
-  setPage,
-  setSelectedMovieID,
-} from "../../store/moviesSlice";
+import { useDispatch } from "react-redux";
+import { setPage, setSelectedMovieID } from "../../store/moviesSlice";
 import CustomMovieTableCell from "./CustomCells/CustomMovieTableCell";
 import CustomMovieTableBodyCell from "./CustomCells/CustomMovieTableBodyCell";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const columns = [
   {
@@ -42,7 +37,7 @@ const columns = [
   },
 ];
 
-export function MoviesList({ data, isFetching, loadMoreData }: MoviesListProps) {
+export function MoviesList({ data, fetches }: MoviesListProps) {
   const dispatch = useDispatch();
   const tableRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,29 +46,21 @@ export function MoviesList({ data, isFetching, loadMoreData }: MoviesListProps) 
   };
 
   const handleScroll = () => {
-    // Reached the bottom of the table
-    if(tableRef.current) {
-      const first = tableRef.current.scrollTop + tableRef.current.clientHeight
-      const second = tableRef.current.scrollHeight
-      console.log('first', first)
-      console.log('second', second)
-      if (
-        tableRef.current &&
-        !isFetching &&
-        tableRef.current.scrollTop + tableRef.current.clientHeight >=
-          tableRef.current.scrollHeight
-      ) {
-        loadMoreData()
+    const tableContainer = tableRef.current;
+    if (!fetches && tableContainer) {
+      const scrolledToBottom =
+        tableContainer.scrollTop + tableContainer.clientHeight >=
+        tableContainer.scrollHeight;
+      if (scrolledToBottom) {
+        dispatch(setPage());
       }
     }
-
   };
 
   useEffect(() => {
     if (tableRef.current) {
       tableRef.current.addEventListener("scroll", handleScroll);
     }
-
     return () => {
       if (tableRef.current) {
         tableRef.current.removeEventListener("scroll", handleScroll);
@@ -82,11 +69,8 @@ export function MoviesList({ data, isFetching, loadMoreData }: MoviesListProps) 
   }, []);
 
   return (
-    <div style={{maxHeight: '80vh'}}>
-      <TableContainer
-        ref={tableRef}
-        sx={{ height: "50vh", overflowY: "auto" }}
-      >
+    <div style={{ maxHeight: "80vh" }}>
+      <TableContainer ref={tableRef} sx={{ height: "50vh", overflowY: "auto" }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -104,7 +88,7 @@ export function MoviesList({ data, isFetching, loadMoreData }: MoviesListProps) 
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((row, i) => (
+            {data.map((row, i) => (
               <TableRow
                 key={`movie-${i}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
