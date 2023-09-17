@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { MoviesListProps } from "../../types/MoviesListProps";
-import { useDispatch } from "react-redux";
-import { setPage, setSelectedMovieID } from "../../store/moviesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSortByRevenue, selectSortByRevenueForYear, setPage, setSelectedMovieID } from "../../store/moviesSlice";
 import CustomMovieTableCell from "./CustomCells/CustomMovieTableCell";
 import CustomMovieTableBodyCell from "./CustomCells/CustomMovieTableBodyCell";
 import { useEffect, useRef } from "react";
@@ -40,6 +40,8 @@ const columns = [
 export function MoviesList({ data, fetches }: MoviesListProps) {
   const dispatch = useDispatch();
   const tableRef = useRef<HTMLDivElement | null>(null);
+  const isSortByRevenue = useSelector(selectSortByRevenue)
+  const isSortByRevenueForYear = useSelector(selectSortByRevenueForYear)
 
   const handleVisualizeMovieDetails = (id: string) => {
     dispatch(setSelectedMovieID(id));
@@ -47,7 +49,7 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
 
   const handleScroll = () => {
     const tableContainer = tableRef.current;
-    if (!fetches && tableContainer) {
+    if (!fetches && tableContainer && !isSortByRevenue && !isSortByRevenueForYear) {
       const scrolledToBottom =
         tableContainer.scrollTop + tableContainer.clientHeight >=
         tableContainer.scrollHeight;
