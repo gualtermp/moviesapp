@@ -1,4 +1,4 @@
-package xpandit.challenge.movies;
+package xpandit.challenge.movies.services;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,6 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import xpandit.challenge.movies.entities.Movie;
+import xpandit.challenge.movies.interfaces.MovieProjection;
+import xpandit.challenge.movies.repositories.MovieRepository;
 
 @Service
 public class MovieService {

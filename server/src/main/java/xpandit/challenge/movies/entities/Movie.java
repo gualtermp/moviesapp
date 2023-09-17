@@ -1,4 +1,4 @@
-package xpandit.challenge.movies;
+package xpandit.challenge.movies.entities;
 
 import java.util.Date;
 import java.util.List;

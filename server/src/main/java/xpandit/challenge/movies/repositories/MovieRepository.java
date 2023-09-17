@@ -1,4 +1,4 @@
-package xpandit.challenge.movies;
+package xpandit.challenge.movies.repositories;
 
 import java.util.Date;
 
@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import xpandit.challenge.movies.entities.Movie;
+import xpandit.challenge.movies.interfaces.MovieProjection;
 
 public interface MovieRepository extends MongoRepository<Movie, Object> {
 
