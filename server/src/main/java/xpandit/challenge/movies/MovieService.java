@@ -1,12 +1,12 @@
 package xpandit.challenge.movies;
 
-import java.util.Calendar;
-import java.util.Comparator;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,6 @@ public class MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
-    private final Logger logger = LoggerFactory.getLogger(MovieService.class);
 
     public Page<Movie> getAllMovies(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "voteAverage"));
@@ -46,8 +45,20 @@ public class MovieService {
     }
 
     public List<MovieProjection> getTop10MoviesByRevenueForYear(int year) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "revenue");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate;
+        Date endDate;
 
-        return movieRepository.findTop10MoviesByRevenueForYear(year, sort);
+        try {
+            startDate = dateFormat.parse(year + "-01-01");
+            endDate = dateFormat.parse(year + "-12-31");
+        } catch (ParseException e) {
+            return Collections.emptyList(); 
+        }
+
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("revenue")));
+        Page<MovieProjection> moviesPage = movieRepository.findTop10MoviesByRevenueForYear(year, startDate, endDate, pageRequest);
+        List<MovieProjection> top10MoviesByRevenueForYear = moviesPage.getContent();
+        return top10MoviesByRevenueForYear;
     }
 }

@@ -1,12 +1,12 @@
 package xpandit.challenge.movies;
 
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MovieRepository extends MongoRepository<Movie, Object> {
 
@@ -14,9 +14,6 @@ public interface MovieRepository extends MongoRepository<Movie, Object> {
 
     @Query("[{ $sort: { revenue: -1 } }, { $limit: 10 }]")
     Page<MovieProjection> findTop10MoviesByRevenue(Pageable pageable);
-
-    // Use a custom query to find the top 10 movies by revenue for the specified
-    // year
-    @Query(value = "{ 'releaseDate': { '$gte': ?0 }, 'releaseDate': { '$lt': ?1 } }")
-    List<MovieProjection> findTop10MoviesByRevenueForYear(int year, Sort sort);
+    @Query("{ release_date: { '$gte': ?1, '$lt': ?2 } }")
+    Page<MovieProjection> findTop10MoviesByRevenueForYear(@Param("year") int year, Date startDate, Date endDate, Pageable pageable);
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectPage,
@@ -6,8 +6,8 @@ import {
   selectSortByRevenue,
   selectSortByRevenueForYear,
   selectYear,
-  setPage,
   setSelectedMovieID,
+  setSortByRevenueForYear,
 } from "../../store/moviesSlice";
 import { useListMoviesQuery, useListTop10MoviesQuery } from "../../store/moviesService";
 import { MoviesList } from "../MoviesList/MoviesList";
@@ -28,6 +28,7 @@ export function MoviesListPage() {
   const selectedMovieID = useSelector(selectSelectedMovieID) ?? "";
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const {
     data: allMovies,
     isLoading,
@@ -40,7 +41,7 @@ export function MoviesListPage() {
     {
       year,
     },
-    { skip: !isSortByRevenue && !isSortByRevenueForYear} // No fetching needed if no filter is toggled 
+    { skip: !isSortByRevenue && !isSortByRevenueForYear } // No fetching needed if no filter is toggled 
   );
 
   useEffect(() => {
@@ -62,7 +63,6 @@ export function MoviesListPage() {
         <div className="title_header">
           <div className="title">
             Movie Ranking
-            {isFetching && <CircularProgress size={20} />}
           </div>
           <Filters />
           {moviesToShow ? (

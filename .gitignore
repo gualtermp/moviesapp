@@ -2,8 +2,8 @@
 client/node_modules/
 # Ignore Java build output
 server/target/
-# Ignore development environment files
-.env
+# # Ignore development environment files
+# .env
 # Ignore logs
 *.log
 # Ignore OS-specific files

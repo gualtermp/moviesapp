@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setYear } from "../../store/moviesSlice";
+import { setSortByRevenueForYear, setYear } from "../../store/moviesSlice";
 
 import './YearsSelector.scss'
 
@@ -17,6 +17,7 @@ export function YearsSelector({onClose}: any) {
 
   const handleYearClick = (year: number) => () => {
     dispatch(setYear(year));
+    dispatch(setSortByRevenueForYear(true))
     onClose(false)
   };
 

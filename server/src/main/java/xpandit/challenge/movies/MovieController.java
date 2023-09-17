@@ -27,11 +27,11 @@ public class MovieController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer year) {
 
-        // If we get a year, then we know we want the top 10 movies by revenued for it
+        // If we get a year, then we know we want the top 10 movies by revenue for it
         if (year != null) {
             // Retrieve top 10 movies by revenue for the specified year
-            List<MovieProjection> top10Movies = movieService.getTop10MoviesByRevenueForYear(year);
-            return new ResponseEntity<>(top10Movies, HttpStatus.OK);
+            List<MovieProjection> top10RevenueYearMovies = movieService.getTop10MoviesByRevenueForYear(year);
+            return new ResponseEntity<>(top10RevenueYearMovies, HttpStatus.OK);
         }
 
         if (fields != null && !fields.isEmpty()) {
