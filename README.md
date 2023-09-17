@@ -11,7 +11,7 @@ First, clone this repo by running:
 
 `git clone https://github.com/gualtermp/moviesapp.git`
 
-It's split in 2 folders: client and server.
+It's split in 2 folders: `client` and `server`.
 
 For ease of access, I've left .env files available. But I know these should be .gitignored :)
 
@@ -25,6 +25,6 @@ After this is done, the server will be running on `localhost:8080`.
 ### **Client**
 
 Also used VS Code. After opening the project, `cd` to `client` and run `yarn`. This will install the needed dependencies.
-After the command finishes, run `ỳarn run dev`. 
+After the command finishes, run `yarn run dev`. 
 
 The client will be running on `localhost:5173`.
