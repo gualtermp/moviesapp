@@ -13,6 +13,7 @@ import { CircularProgress, Modal } from "@mui/material";
 import { MovieInfo } from "../MovieInfo/MovieInfo";
 
 import "./MoviesListPage.scss";
+import { Filters } from "../Filters/Filters";
 
 export function MoviesListPage() {
   const dispatch = useDispatch();
@@ -21,7 +22,11 @@ export function MoviesListPage() {
   const selectedMovieID = useSelector(selectSelectedMovieID) ?? "";
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { data: allMovies, isLoading, isFetching } = useListMoviesQuery({
+  const {
+    data: allMovies,
+    isLoading,
+    isFetching,
+  } = useListMoviesQuery({
     page,
   });
 
@@ -44,6 +49,7 @@ export function MoviesListPage() {
             Movie Ranking
             {isFetching && <CircularProgress size={20} />}
           </div>
+          <Filters />
           {allMovies?.content ? (
             <MoviesList
               data={allMovies?.content}
@@ -53,7 +59,9 @@ export function MoviesListPage() {
         </div>
       </div>
       <Modal open={isModalOpen}>
-        <MovieInfo movieId={selectedMovieID} onClose={handleOnClose} />
+        <>
+          <MovieInfo movieId={selectedMovieID} onClose={handleOnClose} />
+        </>
       </Modal>
     </>
   );

@@ -23,12 +23,27 @@ public class MovieController {
     public ResponseEntity<?> getMovies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) List<String> fields) {
+            @RequestParam(required = false) List<String> fields,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer year) {
+
+        // If we get a year, then we know we want the top 10 movies by revenued for it
+        if (year != null) {
+            // Retrieve top 10 movies by revenue for the specified year
+            List<MovieProjection> top10Movies = movieService.getTop10MoviesByRevenueForYear(year);
+            return new ResponseEntity<>(top10Movies, HttpStatus.OK);
+        }
 
         if (fields != null && !fields.isEmpty()) {
             // Apply projection using the specified fields
-            Page<MovieProjection> moviePage = movieService.getAllMoviesByFields(page, size);
-            return new ResponseEntity<>(moviePage, HttpStatus.OK);
+            if ("revenue".equals(sort)) {
+                List<MovieProjection> top10RevenueMovies = movieService.getTop10MoviesByRevenue();
+                return new ResponseEntity<>(top10RevenueMovies, HttpStatus.OK);
+            } else {
+                Page<MovieProjection> moviePage = movieService.getAllMoviesByFields(page, size);
+                return new ResponseEntity<>(moviePage, HttpStatus.OK);
+            }
+
         } else {
             // No projection, return all fields
             Page<Movie> moviePage = movieService.getAllMovies(page, size);

@@ -32,6 +32,13 @@ export const moviesApi = createApi({
         return currentArg !== previousArg;
       },
     }),
+    listTop10Movies: builder.query<
+      ListResponse<Pick<Movie, "id" | "title" | "releaseDate" | "revenue">>,
+      { year?: number }
+    >({
+      query: ({ year }) =>
+        `movies?&fields=id&fields=title&fields=releaseDate&fields=revenue&sort=revenue${year ? `&year=${year}` : ""}`,
+    }),
     getMovieById: builder.query<Movie, string>({
       query: (id) => `movies/${id}`,
     }),
@@ -40,5 +47,6 @@ export const moviesApi = createApi({
 
 export const {
   useListMoviesQuery,
+  useListTop10MoviesQuery,
   useGetMovieByIdQuery,
 } = moviesApi;
