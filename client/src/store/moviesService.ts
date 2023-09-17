@@ -7,6 +7,7 @@ interface ListResponse<T> {
   content: T[];
 }
 
+// Here we define the API
 export const moviesApi = createApi({
   reducerPath: "moviesApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
@@ -24,7 +25,8 @@ export const moviesApi = createApi({
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
-      // Always merge incoming data to the cache entry
+      // Always merge incoming data to the cache entry - important for infinite scroll
+      // Otherwise we'd keep replacing the data and that's not what we want :)
       merge: (currentCache, newItems) => {
         currentCache.content.push(...newItems.content);
       },
@@ -45,6 +47,7 @@ export const moviesApi = createApi({
   }),
 });
 
+// Export hooks to make the calls
 export const {
   useListMoviesQuery,
   useListTop10MoviesQuery,

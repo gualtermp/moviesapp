@@ -3,13 +3,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { MoviesState } from "../types/MoviesState";
 
+// Initial state for redux store
 const initialState = {
   page: 0,
   sortByRevenue: false,
   sortByRevenueForYear: false,
 } as MoviesState;
 
-// Slice
+// Slice for movie
 const moviesSlice = createSlice({
   name: "movies",
   initialState,
@@ -51,6 +52,7 @@ export const selectSortByRevenue = (state: RootState) =>
 export const selectSortByRevenueForYear = (state: RootState) =>
   state.movies.sortByRevenueForYear;
 
+// Export actions
 export const {
   setPage,
   setSelectedMovieID,
@@ -60,4 +62,5 @@ export const {
   setYear,
 } = moviesSlice.actions;
 
+// Export reducer
 export default moviesSlice.reducer;

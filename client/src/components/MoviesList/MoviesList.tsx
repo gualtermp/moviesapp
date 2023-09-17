@@ -13,29 +13,7 @@ import { selectSortByRevenue, selectSortByRevenueForYear, setPage, setSelectedMo
 import CustomMovieTableCell from "./CustomCells/CustomMovieTableCell";
 import CustomMovieTableBodyCell from "./CustomCells/CustomMovieTableBodyCell";
 import { useEffect, useRef } from "react";
-
-const columns = [
-  {
-    label: "Ranking",
-    width: "5%",
-  },
-  {
-    label: "Title",
-    width: "55%",
-  },
-  {
-    label: "Year",
-    width: "15%",
-  },
-  {
-    label: "Revenue",
-    width: "17.5%",
-  },
-  {
-    label: "",
-    width: "7.5%",
-  },
-];
+import { columns } from "./columns";
 
 export function MoviesList({ data, fetches }: MoviesListProps) {
   const dispatch = useDispatch();
@@ -47,9 +25,10 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
     dispatch(setSelectedMovieID(id));
   };
 
+  // Detects we reached the table bottom and if so, new data should be fetched
   const handleScroll = () => {
     const tableContainer = tableRef.current;
-    if (!fetches && tableContainer && !isSortByRevenue && !isSortByRevenueForYear) {
+    if (!fetches && tableContainer && (!isSortByRevenue || !isSortByRevenueForYear)) {
       const scrolledToBottom =
         tableContainer.scrollTop + tableContainer.clientHeight >=
         tableContainer.scrollHeight;
@@ -59,6 +38,7 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
     }
   };
 
+  // Adds scroll event listener to table
   useEffect(() => {
     if (tableRef.current) {
       tableRef.current.addEventListener("scroll", handleScroll);
@@ -76,15 +56,15 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {columns.map((c, i) => (
+              {columns.map((col, i) => (
                 <CustomMovieTableCell
-                  width={c.width}
-                  key={`column-${c.label}`}
+                  width={col.width}
+                  key={`column-${col.label}`}
                   sx={{
                     textAlign: i === 0 ? "center" : "left",
                   }}
                 >
-                  {c.label.toUpperCase()}
+                  {col.label.toUpperCase()}
                 </CustomMovieTableCell>
               ))}
             </TableRow>

@@ -7,7 +7,6 @@ import {
   selectSortByRevenueForYear,
   selectYear,
   setSelectedMovieID,
-  setSortByRevenueForYear,
 } from "../../store/moviesSlice";
 import { useListMoviesQuery, useListTop10MoviesQuery } from "../../store/moviesService";
 import { MoviesList } from "../MoviesList/MoviesList";
@@ -29,6 +28,7 @@ export function MoviesListPage() {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  // Fetch movies
   const {
     data: allMovies,
     isLoading,
@@ -37,6 +37,7 @@ export function MoviesListPage() {
     page,
   });
 
+  // Fetch top movies
   const { data: topMovies } = useListTop10MoviesQuery(
     {
       year,
