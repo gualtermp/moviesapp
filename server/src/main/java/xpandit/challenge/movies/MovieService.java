@@ -39,9 +39,10 @@ public class MovieService {
     }
 
     public List<MovieProjection> getTop10MoviesByRevenue() {
-        Sort sort = Sort.by(Sort.Direction.DESC, "revenue");
-
-        return movieRepository.findTop10MoviesByRevenue(sort);
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("revenue")));
+        Page<MovieProjection> moviesPage = movieRepository.findTop10MoviesByRevenue(pageRequest);
+        List<MovieProjection> top10MoviesByRevenue = moviesPage.getContent();
+        return top10MoviesByRevenue;
     }
 
     public List<MovieProjection> getTop10MoviesByRevenueForYear(int year) {

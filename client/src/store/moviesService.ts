@@ -37,7 +37,7 @@ export const moviesApi = createApi({
       { year?: number }
     >({
       query: ({ year }) =>
-        `movies?&fields=id&fields=title&fields=releaseDate&fields=revenue&sort=revenue${year ? `&year=${year}` : ""}`,
+        `movies?fields=id&fields=title&fields=releaseDate&fields=revenue&sort=revenue${year ? `&year=${year}` : ""}`,
     }),
     getMovieById: builder.query<Movie, string>({
       query: (id) => `movies/${id}`,

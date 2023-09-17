@@ -68,8 +68,6 @@ export function MoviesList({ data, fetches }: MoviesListProps) {
     };
   }, []);
 
-  console.log(data[0].releaseDate)
-
   return (
     <div style={{ maxHeight: "80vh" }}>
       <TableContainer ref={tableRef} sx={{ height: "50vh", overflowY: "auto" }}>

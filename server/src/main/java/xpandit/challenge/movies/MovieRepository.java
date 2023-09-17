@@ -12,10 +12,11 @@ public interface MovieRepository extends MongoRepository<Movie, Object> {
 
     Page<MovieProjection> findAllProjectedBy(Pageable pageable);
 
-    List<MovieProjection> findTop10MoviesByRevenue(Sort sort);
+    @Query("[{ $sort: { revenue: -1 } }, { $limit: 10 }]")
+    Page<MovieProjection> findTop10MoviesByRevenue(Pageable pageable);
 
     // Use a custom query to find the top 10 movies by revenue for the specified
     // year
-    @Query(value = "{ 'releaseDate': { '$gte': ?0, '$lt': ?1 } }")
+    @Query(value = "{ 'releaseDate': { '$gte': ?0 }, 'releaseDate': { '$lt': ?1 } }")
     List<MovieProjection> findTop10MoviesByRevenueForYear(int year, Sort sort);
 }
