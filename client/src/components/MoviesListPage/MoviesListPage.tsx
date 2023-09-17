@@ -8,7 +8,10 @@ import {
   selectYear,
   setSelectedMovieID,
 } from "../../store/moviesSlice";
-import { useListMoviesQuery, useListTop10MoviesQuery } from "../../store/moviesService";
+import {
+  useListMoviesQuery,
+  useListTop10MoviesQuery,
+} from "../../store/moviesService";
 import { MoviesList } from "../MoviesList/MoviesList";
 import "./MoviesListPage.scss";
 import { CircularProgress, Modal } from "@mui/material";
@@ -21,9 +24,9 @@ export function MoviesListPage() {
   const dispatch = useDispatch();
 
   const page = useSelector(selectPage);
-  const year = useSelector(selectYear)
-  const isSortByRevenue = useSelector(selectSortByRevenue)
-  const isSortByRevenueForYear = useSelector(selectSortByRevenueForYear)
+  const year = useSelector(selectYear);
+  const isSortByRevenue = useSelector(selectSortByRevenue);
+  const isSortByRevenueForYear = useSelector(selectSortByRevenueForYear);
   const selectedMovieID = useSelector(selectSelectedMovieID) ?? "";
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -38,12 +41,13 @@ export function MoviesListPage() {
   });
 
   // Fetch top movies
-  const { data: topMovies } = useListTop10MoviesQuery(
-    {
-      year,
-    },
-    { skip: !isSortByRevenue && !isSortByRevenueForYear } // No fetching needed if no filter is toggled 
-  );
+  const { data: topMovies, isFetching: isFetchingTop } =
+    useListTop10MoviesQuery(
+      {
+        year,
+      },
+      { skip: !isSortByRevenue && !isSortByRevenueForYear } // No fetching needed if no filter is toggled
+    );
 
   useEffect(() => {
     if (selectedMovieID) {
@@ -56,15 +60,27 @@ export function MoviesListPage() {
     setIsModalOpen(false);
   };
 
-  const moviesToShow = isSortByRevenue || isSortByRevenueForYear ? topMovies : allMovies;
+  const moviesToShow =
+    isSortByRevenue || isSortByRevenueForYear ? topMovies : allMovies;
+
+  if (isFetching || isFetchingTop) {
+    return (
+      <CircularProgress
+        size={80}
+        sx={{
+          position: "absolute",
+          top: "30%",
+          left: "50%",
+        }}
+      />
+    );
+  }
 
   return (
     <>
       <div className="container_movies_list">
         <div className="title_header">
-          <div className="title">
-            Movie Ranking
-          </div>
+          <div className="title">Movie Ranking</div>
           <Filters />
           {moviesToShow ? (
             <MoviesList
