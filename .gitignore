@@ -15,13 +15,7 @@ yarn.lock
 # Ignore IDE-specific files
 .idea/
 .vscode/
-# Ignore Gradle build files
-.gradle/
-build/
-# Ignore Eclipse-specific files
-.classpath
-.project
-.settings/
+**/.vscode/
 # Ignore Maven build files
 target/
 # Ignore OS-generated files
